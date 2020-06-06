@@ -3,6 +3,7 @@ FROM centos:7
 LABEL maintainer="Claudio Bantalouaks <cbantaloukas@ccdc.cam.ac.uk>"
 # Based on conan-io/gcc_7-centos6 by
 # LABEL maintainer="Luis Martinez de Bartolome <luism@jfrog.com>"
+# This version removes the conan user
 
 ENV PATH=/opt/rh/rh-python36/root/usr/bin:/opt/rh/devtoolset-9/root/usr/bin:/opt/rh/rh-perl526/root/usr/local/bin:/opt/rh/rh-perl526/root/usr/bin:/opt/rh/sclo-git25/root/usr/bin:${PATH:+:${PATH}} \
     MANPATH=/opt/rh/rh-python36/root/usr/share/man:/opt/rh/devtoolset-9/root/usr/share/man:/opt/rh/rh-perl526/root/usr/share/man:/opt/rh/sclo-git25/root/usr/share/man:${MANPATH:+:${MANPATH}} \
@@ -67,13 +68,5 @@ RUN yum update -y \
     && rm /tmp/cmake-3.17.3-Linux-x86_64.sh \
     && pip install -q --upgrade --no-cache-dir pip \
     && pip install -q --no-cache-dir conan conan-package-tools \
-    && sed -i 's/# %wheel/%wheel/g' /etc/sudoers \
-    && echo 'conan  ALL=(ALL)       NOPASSWD: ALL' >> /etc/sudoers \
-    && groupadd conan -g 1001 \
-    && useradd -ms /bin/bash conan -g conan -G wheel \
-    && printf "conan:conan" | chpasswd \
     && chgrp -R wheel /opt/rh/rh-python36/root \
     && chmod -R g+w -R /opt/rh/rh-python36/root
-
-USER conan
-WORKDIR /home/conan
