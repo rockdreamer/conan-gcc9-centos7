@@ -68,8 +68,9 @@ RUN yum update -y \
     && pip install -q --upgrade --no-cache-dir pip \
     && pip install -q --no-cache-dir conan conan-package-tools \
     && sed -i 's/# %wheel/%wheel/g' /etc/sudoers \
+    && echo 'conan  ALL=(ALL)       NOPASSWD: ALL' >> /etc/sudoers \
     && groupadd conan -g 1001 \
-    && useradd -ms /bin/bash conan -g conan -u 1001 -G wheel \
+    && useradd -ms /bin/bash conan -g conan -G wheel \
     && printf "conan:conan" | chpasswd \
     && chgrp -R wheel /opt/rh/rh-python36/root \
     && chmod -R g+w -R /opt/rh/rh-python36/root
